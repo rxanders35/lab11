@@ -3,7 +3,7 @@ import os
 
 students_data = "data/students.txt"
 assignments_data = "data/assignments.txt"
-submissions_dir = "submissions"
+submissions_dir = "data/submissions"
 
 class Assignment:
     def __init__(self, name, _id, points):
@@ -16,34 +16,35 @@ class Student:
         self._id = _id
         self.name = name
 
-def students():
+def load_students():
     students = {}
     file = open(students_data, "r")
     lines = file.readlines()
     file.close()
-    for student in file:
-        _id = student[:3]
-        name = student[3:].strip()
+    for line in lines:
+        _id = line[:3]
+        name = line[3:].strip()
         students[_id] = Student(_id, name) 
         students[name] = students[_id]
     return students
 
-def assignments():
-    assigments = {}
+def load_assignments():
+    assignments = {}
     file = open(assignments_data, "r")
-    lines = file.readline()
+    lines = file.readlines()
     file.close()
 
     for i in range(0, len(lines), 3):
         name = lines[i].strip()
-        _id = int(lines[i  + 1].strip())
+        _id = lines[i  + 1].strip()
         points = int(lines[i + 2].strip())
-        assignments[name] = Assignment(name, _id, points)
-        assignments[name] = assignments[_id]
+        assignment= Assignment(name, _id, points)
+        assignments[_id] = assignment
+        assignments[name] = assignment
 
     return assignments
 
-def submissions():
+def load_submissions():
     submissions = {}
     for file in os.listdir(submissions_dir):
         f = open(os.path.join(submissions_dir, file), "r")
@@ -58,7 +59,7 @@ def submissions():
     return submissions
 
 def calculate_grade(students, assignments, submissions, name):
-    if student_name not in students:
+    if name not in students:
         return "Student not found" 
 
     student = students[name]
@@ -71,10 +72,13 @@ def calculate_grade(students, assignments, submissions, name):
     for a_id, per in submissions[student._id].items():
         assignment = next((a for a in assignments.values() if isinstance(a, Assignment) and a._id == a_id), None)
         if assignment:
-            points += assignment.points
+            total += assignment.points
             earned += (per / 100) * assignment.points
 
-    result = (earned / total)* 100
+    if total == 0:
+        return "0%"
+
+    result = round((earned / total)* 100)
     return f"{result}%"
 
 def assignment_statistics(assignments, submissions, assignment_name):
@@ -95,10 +99,7 @@ def assignment_statistics(assignments, submissions, assignment_name):
 
     return f"Min: {mi}%\nAvg: {a}%\nMax: {ma}%"
 
-
-    
-
-def graph(assigments, submissions, assignment_name):
+def display_graph(assigments, submissions, assignment_name):
     if assignment_name not in assignments:
         return "Assignment not found"
 
@@ -112,12 +113,13 @@ def graph(assigments, submissions, assignment_name):
     
     plt.hist(scores, bins=[0, 25, 50, 75, 100])
     plt.show()
+    return None
 
 def main():
 
-    students = students()
-    assignments = assignments()
-    submissions = submissions()
+    students = load_students()
+    assignments = load_assignments()
+    submissions = load_submissions()
     print('''
 1. Student grade
 2. Assignment statistics
@@ -128,15 +130,15 @@ def main():
     if selection == "1":
         student_name = input("What is the student's name: ")
         grade = calculate_grade(students, assignments, submissions, student_name)
-        print(f"{grade}%")
+        print(grade)
     elif selection == "2":
         assigment_name = input("What is the assignment name: ")
         stats = assignment_statistics(assigment_name,assignments, submissions) 
-        print(f"{stats}") 
+        print(stats) 
     elif selection == "3":
         assigment_name = input("What is the assignment name: ")
         graph = graph(assigment_name, assignments, submissions)
-        print(f"{result}")
+        print(result)
 
 if __name__ == "__main__":
     main()

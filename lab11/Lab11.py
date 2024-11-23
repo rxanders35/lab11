@@ -9,7 +9,7 @@ def students():
     students = {}
     file = open(students, "r")
     for student in file:
-        _id, name = line[3:] = student[:3], student[3:].strip()
+        _id, name = student[:3], student[3:].strip()
         students[name] = int(id)
     file.close()
     return students

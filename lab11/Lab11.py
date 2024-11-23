@@ -128,17 +128,18 @@ def main():
     if selection == "1":
         student_name = input("What is the student's name: ")
         grade = calculate_grade(students, assignments, submissions, student_name)
-        if grade is None:
-            print("Student not found")
-        else:
-            print(f"{grade}%")
+        print(f"{grade}%")
     elif selection == "2":
         assigment_name = input("What is the assignment name: ")
-        
+        stats = assignment_statistics(assigment_name,assignments, submissions) 
+        print(f"{stats}") 
+    elif selection == "3":
+        assigment_name = input("What is the assignment name: ")
+        graph = graph(assigment_name, assignments, submissions)
+        print(f"{result}")
 
-
-
-
+if __name__ == "__main__":
+    main()
 
 
 

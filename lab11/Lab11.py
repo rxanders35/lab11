@@ -1,3 +1,6 @@
+import matplotlib
+# I am doing this because I am using Windows Subsystem for Linux
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import os
 
@@ -99,20 +102,30 @@ def assignment_statistics(assignments, submissions, assignment_name):
 
     return f"Min: {mi}%\nAvg: {a}%\nMax: {ma}%"
 
-def display_graph(assigments, submissions, assignment_name):
+def display_graph(assignments, submissions, assignment_name):
     if assignment_name not in assignments:
         return "Assignment not found"
 
-    assignment = assigments[assignment_name]
+    assignment = assignments[assignment_name]
     scores = []
     for subs in submissions.values():
         if assignment._id in subs:
             scores.append(subs[assignment._id])
     if not scores:
         return "Submissions not found"
-    
+
+    plt.figure() 
     plt.hist(scores, bins=[0, 25, 50, 75, 100])
-    plt.show()
+    plt.savefig('plot.png')
+    '''
+    The plt will get saved to the project directory
+    instead of opened in a window due to the fact that I
+    am using WSL2
+
+    I personally DONT feel like copying the code over to
+    a Windows directory and re-cloning the repo
+    '''
+    plt.close()
     return None
 
 def main():
@@ -132,13 +145,14 @@ def main():
         grade = calculate_grade(students, assignments, submissions, student_name)
         print(grade)
     elif selection == "2":
-        assigment_name = input("What is the assignment name: ")
-        stats = assignment_statistics(assigment_name,assignments, submissions) 
+        assignment_name = input("What is the assignment name: ")
+        stats = assignment_statistics(assignments, submissions, assignment_name) 
         print(stats) 
     elif selection == "3":
-        assigment_name = input("What is the assignment name: ")
-        graph = graph(assigment_name, assignments, submissions)
-        print(result)
+        assignment_name = input("What is the assignment name: ")
+        result = display_graph(assignments, submissions, assignment_name)
+        if result:
+            print(result)
 
 if __name__ == "__main__":
     main()

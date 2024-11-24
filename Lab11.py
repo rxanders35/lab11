@@ -96,9 +96,9 @@ def assignment_statistics(assignments, submissions, assignment_name):
     if not scores:
         return "Submissions not found"
     
-    mi = min(scores)
-    a = round(sum(scores) / len(scores))
-    ma = max(scores)
+    mi = int(min(scores))
+    a = int(round(sum(scores) / len(scores)))
+    ma = int(max(scores))
 
     return f"Min: {mi}%\nAvg: {a}%\nMax: {ma}%"
 
@@ -140,8 +140,7 @@ def main():
     print('''
 1. Student grade
 2. Assignment statistics
-3. Assignment graph 
-    ''')
+3. Assignment graph''')
     selection = input("\nEnter your selection: ")
 
     if selection == "1":

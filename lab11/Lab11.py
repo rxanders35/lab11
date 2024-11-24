@@ -115,7 +115,11 @@ def display_graph(assignments, submissions, assignment_name):
         return "Submissions not found"
 
     plt.figure() 
-    plt.hist(scores, bins=[0, 25, 50, 75, 100])
+    plt.hist(scores, bins=[
+                    50, 55, 60, 65, 
+                    70, 75, 80, 85, 
+                    90, 95, 100
+                        ])
     plt.savefig('plot.png')
     '''
     The plt will get saved to the project directory

@@ -96,11 +96,11 @@ def assignment_statistics(assignments, submissions, assignment_name):
     if not scores:
         return "Submissions not found"
     
-    mi = int(min(scores))
-    a = int(round(sum(scores) / len(scores)))
-    ma = int(max(scores))
+    mi = min(scores)
+    a = round(sum(scores) / len(scores))
+    ma = max(scores)
 
-    return f"Min: {mi}%\nAvg: {a}%\nMax: {ma}%"
+    return f"Min: {int(mi)}%\nAvg: {int(a)}%\nMax: {int(ma)}%"
 
 def display_graph(assignments, submissions, assignment_name):
     if assignment_name not in assignments:

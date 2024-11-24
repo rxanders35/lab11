@@ -97,7 +97,7 @@ def assignment_statistics(assignments, submissions, assignment_name):
         return "Submissions not found"
     
     mi = min(scores)
-    a = round(sum(scores) / len(scores))
+    a = sum(scores) / len(scores)
     ma = max(scores)
 
     return f"Min: {int(mi)}%\nAvg: {int(a)}%\nMax: {int(ma)}%"
